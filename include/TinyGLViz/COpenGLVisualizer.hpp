@@ -286,7 +286,25 @@ namespace TinyGLViz {
                 T_real FPS = T_real(1) / (std::chrono::duration_cast<std::chrono::nanoseconds>(lastFrameTime - time).count() * 1e-9);
                 lastFrameTime = std::chrono::high_resolution_clock::now();
 
-                pTextDrawer->RenderText("FPS: " + std::to_string(FPS),0.0,0.0,0.5,vec3::Vector3<GLfloat>(0,0,0),v.getSizeVertical()*height,v.getSizeHorizontal()*width);
+                if (m_status_str.empty())
+                    pTextDrawer->RenderText("FPS: " + std::to_string(FPS),0.0,0.0,0.5,vec3::Vector3<GLfloat>(0,0,0),v.getSizeVertical()*height,v.getSizeHorizontal()*width);
+                else
+                {
+                    std::stringstream ss(m_status_str);
+                    std::string item;
+                    std::vector<std::string> tokens;
+                    while (std::getline(ss, item, '\n')) {
+                        tokens.push_back(item);
+                    }
+                    double lineHeight = 30;
+                    uint nline = 0;
+                    for (const auto& str:tokens)
+                    {
+                        pTextDrawer->RenderText(str,0.0,lineHeight * nline + 5.0,0.5,vec3::Vector3<GLfloat>(0,0,0),v.getSizeVertical()*height,v.getSizeHorizontal()*width);
+                        nline++;
+                    }
+                }
+
             }
         }
 
@@ -395,12 +413,18 @@ namespace TinyGLViz {
             m_viewports.push_back(viewport);
         }
 
+        void drawText(const std::string& str)
+        {
+            m_status_str = str;
+        }
+
         std::map< std::string, CGLPrimitive::Ptr > m_primitives;
         std::map< std::string, CMaterial::Ptr > m_material;
         std::map< std::string, Shader * > m_shaders;
         std::vector< COpenGLViewport > m_viewports;
 
     protected:
+        std::string m_status_str = "";
         std::chrono::high_resolution_clock::time_point lastFrameTime;
         CTextDrawer * pTextDrawer;
         CDirectionalLight dirLight;

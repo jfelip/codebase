@@ -16,10 +16,18 @@ namespace TinyGLViz {
 
     class CSolidLine : public CGLPrimitive
     {
+    public:
+        typedef enum
+        {
+            LINES = GL_LINES,
+            LINE_STRIP = GL_LINE_STRIP
+        } DRAW_STYLE;
+
+
     protected:
         CMaterial mat;
         vec3::Vector3<T_vertex> m_color;
-
+        DRAW_STYLE m_line_type = DRAW_STYLE::LINES;
     public:
         typedef std::shared_ptr<CSolidLine> Ptr;
 
@@ -29,7 +37,6 @@ namespace TinyGLViz {
 
         T_vertex m_lineWidth = 1.0;
 
-
         CSolidLine(const T_vertex& lwidth=1.0, const vec3::Vector3<T_vertex >& color=vec3::Vector3<T_vertex>(1,0,0))
         {
             m_lineWidth = lwidth;
@@ -37,6 +44,7 @@ namespace TinyGLViz {
         }
         ~CSolidLine() = default;
 
+        void setDrawStyle(DRAW_STYLE ds) { m_line_type = ds; }
 
         virtual void addVertex(const vec3::Vector3<T_vertex> &v)
         {
@@ -92,7 +100,7 @@ namespace TinyGLViz {
                 }
             }
 
-            m_geom.setDrawType(GL_LINES);
+            m_geom.setDrawType(m_line_type);
             m_geom.setVertices(vertices);
             m_geom.setIndices(indices);
             m_geom.setNormals(normals);
