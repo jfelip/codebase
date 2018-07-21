@@ -81,23 +81,25 @@ namespace TinyGLViz {
             bool odd = !(m_points.size()%2 == 0);
             for (const auto& p:m_points)
             {
-                if (i != m_points.size()-1 || !odd)
-                {
-                    vertices.push_back(p.x());
-                    vertices.push_back(p.y());
-                    vertices.push_back(p.z());
 
-                    normals.push_back(p.x());
-                    normals.push_back(p.y());
-                    normals.push_back(p.z());
-
-                    colors.push_back(m_color.x());
-                    colors.push_back(m_color.y());
-                    colors.push_back(m_color.z());
-
-                    indices.push_back(i);
-                    ++i;
+                if (i >= m_points.size()-1 && odd) {
+                    break;
                 }
+
+                vertices.push_back(p.x());
+                vertices.push_back(p.y());
+                vertices.push_back(p.z());
+
+                normals.push_back(p.x());
+                normals.push_back(p.y());
+                normals.push_back(p.z());
+
+                colors.push_back(m_color.x());
+                colors.push_back(m_color.y());
+                colors.push_back(m_color.z());
+
+                indices.push_back(i);
+                ++i;
             }
 
             m_geom.setDrawType(m_line_type);

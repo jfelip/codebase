@@ -201,7 +201,7 @@ namespace TinyGLViz {
         // Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
         void ProcessMouseScroll(T_real yoffset)
         {
-            this->Position += this->Front * yoffset * this->MouseSensitivity * 10.0f;
+            this->Position += this->Front * yoffset * this->MouseSensitivity * T_real(10.0);
             lookAt(m_target);
         }
 
